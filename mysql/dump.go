@@ -14,8 +14,11 @@ type Param struct {
 
 // DumpAll dump all database
 func (d Database) DumpAll() {
-
-	//os.Ex
+	// cmd := exec.Command("mysqldump", "d.")
+	// out, err := cmd.CombinedOutput()
+	// if err != nil {
+	// 	log.Fatalf("cmd.Run() failed with %s\n", err)
+	// }
 }
 
 // Dump databse and tables

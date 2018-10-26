@@ -19,13 +19,13 @@ type File struct {
 func (f File) CreateDir() error {
 	// Validate if  f.Dir is empty
 	if f.Dir == "" {
-		return fmt.Errorf("Atributo Dir não pode ser vazio\n")
+		return fmt.Errorf("Atributo Dir não pode ser vazio")
 	}
 
 	dir := fmt.Sprintf("%s_%s", f.Dir, f.Created)
 	err := os.Mkdir(dir, os.ModePerm)
 	if err != nil {
-		return err
+		return fmt.Errorf("Falha ao criar pasta %s >> %s", dir, err)
 	}
 	fmt.Printf("Pasta %s criada!\n", Green(f.Dir))
 	return nil

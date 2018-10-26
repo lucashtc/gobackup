@@ -1,13 +1,12 @@
 package main
 
-//. "github.com/logrusorgru/aurora"
 import (
 	"fmt"
-	"io/ioutil"
-	"log"
 
-	"gopkg.in/yaml.v2"
+	"github.com/lucashtc/gobackup/mysql"
 )
+
+//. "github.com/logrusorgru/aurora"
 
 func main() {
 	// stop := make(chan bool, 1)
@@ -27,32 +26,48 @@ func main() {
 	// 	fmt.Println(err)
 	// }
 
-	// Param database e tables
-	type Param struct {
-		BD    string   `yaml:"BD"`
-		Table []string `yaml:",Table"`
-	}
-
-	// Database info databse
-	type Database struct {
-		Server string  `yaml:"Server"`
-		Param  []Param `yaml:",Param"`
-	}
-
 	// file, err := ioutil.ReadFile("./config.yml")
 	// if err != nil {
 	// 	log.Fatal("Error ao encotrar o arquivo =>", err)
 	// }
-	t := Database{
-		Server : "SGE",
-		Param: [0]{
-			DB: "acompanhamento",
-			Param: []
-		}
+	// t := []config.Database{
+	// 	{
+	// 		Server: "SGE",
+	// 		Param: []config.Param{
+	// 			{
+	// 				DB:    "acompanhamento",
+	// 				Table: []string{"tabela1", "table2"},
+	// 			},
+	// 		},
+	// 	}, {
+	// 		Server: "SGE",
+	// 		Param: []config.Param{
+	// 			{
+	// 				DB:    "acompanhamento",
+	// 				Table: []string{"tabela1", "table2"},
+	// 			},
+	// 		},
+	// 	},
+	// }
+	// New, _ := yaml.Marshal(t)
+
+	// arg := os.Args
+	// fmt.Println(arg)
+	// file, _ := ioutil.ReadFile("config.yml")
+	// t := []config.Database{}
+
+	// err := yaml.Unmarshal(file, &t)
+
+	// if err != nil {
+	// 	fmt.Println(err)
+	// }
+	// fmt.Println(t)
+	//arg.Arg(os.Args)
+
+	m := mysql.DB{}
+	_, err := m.GetTables("acompanhamento")
+	if err != nil {
+		fmt.Printf("Deu ruin %s", err)
 	}
-
-	yaml.Unmarshal([]byte(file), &t)
-
-	fmt.Println(t)
-
+	fmt.Println(m.Table)
 }

@@ -1,8 +1,12 @@
-Server: Homologação
-Param:
-  -
-  DB: acompanhamento
-  Table: [ordem_servico,regional]
-  -
-  DB: contact_api
-  Table: user
+- Server: SGE
+  Param:
+  - DB: ti
+    Table:
+    - pipeline
+    - mss
+- Server: acompanhamento
+  Param:
+  - DB: acompanhamento
+    Table:
+    - ordem_servico
+    - regional
