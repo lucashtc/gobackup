@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	. "github.com/logrusorgru/aurora"
+	"github.com/lucashtc/gobackup/helper"
 )
 
 // File Data for created dir and files
@@ -16,17 +16,42 @@ type File struct {
 }
 
 //CreateDir Diretory for save files sql
-func (f File) CreateDir() error {
+// name nome do banco
+// path é a pasta onde ficará os backups
+func CreateDir(name string, path string) (*File, error) {
+	var f *File
+	// If not exist define default
+	if path == "" {
+		path = "/backup/"
+	}
+	// Get date e hour
+	created := helper.GetCurrentTime()
+	f.Created = created
+
 	// Validate if  f.Dir is empty
-	if f.Dir == "" {
-		return fmt.Errorf("Atributo Dir não pode ser vazio")
+	if name == "" {
+		return f, fmt.Errorf("Param name não pode ser vazio")
 	}
 
-	dir := fmt.Sprintf("%s_%s", f.Dir, f.Created)
-	err := os.Mkdir(dir, os.ModePerm)
-	if err != nil {
-		return fmt.Errorf("Falha ao criar pasta %s >> %s", dir, err)
+	// If not exist folder path vai create :-)
+	exists := pathNotExist(path)
+	if exists {
+		err := os.Mkdir(path, os.ModePerm)
+		if err != nil {
+			return f, fmt.Errorf("Falha ao criar path>>> %s", err)
+		}
 	}
-	fmt.Printf("Pasta %s criada!\n", Green(f.Dir))
-	return nil
+
+	dirStmt := fmt.Sprintf("%s/backup_%s_%s", path, created, name)
+	err := os.Mkdir(name, os.ModePerm)
+	if err != nil {
+		return f, fmt.Errorf("Falha ao criar pasta %s >> %s", dirStmt, err)
+	}
+	f.Dir = dirStmt
+	return f, nil
+}
+
+func pathNotExist(path string) bool {
+	_, err := os.Stat(path)
+	return os.IsNotExist(err)
 }
