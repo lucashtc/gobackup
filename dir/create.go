@@ -28,7 +28,7 @@ func CreateDir(name string, path string) (File, error) {
 	created := helper.GetCurrentTime()
 	f.Created = created
 
-	// Validate if  f.Dir is empty
+	// Validate if f.Dir is empty
 	if name == "" {
 		return f, fmt.Errorf("Param name não pode ser vazio")
 	}
@@ -42,8 +42,7 @@ func CreateDir(name string, path string) (File, error) {
 		}
 	}
 
-	dirStmt := fmt.Sprintf("%s/%s_%s", path, name, created)
-	fmt.Println(dirStmt)
+	dirStmt := fmt.Sprintf("%s/backup_%s/%s", path, created, name)
 	err := os.MkdirAll(dirStmt, os.ModePerm)
 	if err != nil {
 		return f, fmt.Errorf("Falha ao criar pasta %s >> %s", dirStmt, err)
