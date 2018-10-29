@@ -33,15 +33,6 @@ func CreateDir(name string, path string) (File, error) {
 		return f, fmt.Errorf("Param name não pode ser vazio")
 	}
 
-	// If not exist folder go create :-)
-	exists := pathNotExist(path)
-	if exists {
-		err := os.MkdirAll(path, os.ModePerm)
-		if err != nil {
-			return f, fmt.Errorf("Falha ao criar path>>> %s", err)
-		}
-	}
-
 	dirStmt := fmt.Sprintf("%s/backup_%s/%s", path, created, name)
 	err := os.MkdirAll(dirStmt, os.ModePerm)
 	if err != nil {
