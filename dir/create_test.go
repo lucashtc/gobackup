@@ -4,6 +4,7 @@ import (
 	"testing"
 )
 
+// Melhorar codigo para verificar se os arquivos firam criados como esperado
 func Test_CreatDir(t *testing.T) {
 	bd := []string{"user", "produtos", "umGrandeVazio"}
 	path := "/backup"
