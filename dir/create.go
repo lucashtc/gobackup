@@ -18,15 +18,15 @@ type File struct {
 //CreateDir Diretory for save files sql
 // name nome do banco
 // path é a pasta onde ficará os backups
-func CreateDir(name string, path string) (*File, error) {
-	var f *File
+func CreateDir(name string, path string) (File, error) {
+	f := File{}
 	// If not exist define default
 	if path == "" {
 		path = "/backup/"
 	}
-	// Get date e hour
+	// Get date and hour
 	created := helper.GetCurrentTime()
-	//f.Created = created
+	f.Created = created
 
 	// Validate if  f.Dir is empty
 	if name == "" {
@@ -48,7 +48,7 @@ func CreateDir(name string, path string) (*File, error) {
 	if err != nil {
 		return f, fmt.Errorf("Falha ao criar pasta %s >> %s", dirStmt, err)
 	}
-	//f.Dir = dirStmt
+	f.Dir = dirStmt
 	return f, nil
 }
 
