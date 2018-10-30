@@ -29,16 +29,14 @@ func (db *DB) GetDatabase() ([]string, error) {
 	stringStmt := strings.Split(string(out), "\r\n")
 
 	for _, v := range stringStmt {
-		if v != "" || v != "information_schema" || v != "performance_schema" {
-			newStringStmt = append(newStringStmt, v)
-		}
+		newStringStmt = append(newStringStmt, v)
 	}
 	db.Database = newStringStmt
 	return newStringStmt, nil
 }
 
 // GetTables execute command for getting all name tables and views
-func (db *DB) GetTables(database string) ([]string, error) {
+func (db *DB) GetTable(database string) ([]string, error) {
 	var newStringStmt []string
 	stmtCommand := fmt.Sprintf("USE %s; SHOW TABLES;", database)
 	command := []string{"-B", "-s", "-u", "root", "-e", stmtCommand}
@@ -57,8 +55,9 @@ func (db *DB) GetTables(database string) ([]string, error) {
 	return newStringStmt, nil
 }
 
-// GetProcedure getProcedures by database
-func (db *DB) GetProcedure(database string) ([]string, error) {
-	var newStringStmt []string
-	stmtCommand := fmt.Sprintf("USE %s; SHOW PROCEDURES")
-}
+// // GetProcedure getProcedures by database
+// func (db *DB) GetProcedure(database string) ([]string, error) {
+// 	var newStringStmt []string
+// 	stmtCommand := fmt.Sprintf("USE %s; SHOW PROCEDURES")
+// 	return []string{}, nil
+// }
