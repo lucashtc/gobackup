@@ -1,11 +1,13 @@
-package mysql
+package mysql_test
 
 import (
 	"testing"
+
+	"github.com/lucashtc/gobackup/mysql"
 )
 
 func Test_GetDataBase(t *testing.T) {
-	db := DB{}
+	db := mysql.DB{}
 	bases, err := db.GetDatabase()
 	if err != nil {
 		t.Errorf("Falha os obter name database >> %s", err)
@@ -15,7 +17,7 @@ func Test_GetDataBase(t *testing.T) {
 }
 
 func Test_GetTable(t *testing.T) {
-	db := DB{}
+	db := mysql.DB{}
 	bases, err := db.GetDatabase()
 	if err != nil {
 		t.Errorf("Falha ao obter nome das bases de dados >> %s", err)
@@ -29,4 +31,13 @@ func Test_GetTable(t *testing.T) {
 		t.Logf("Resultado %s", out)
 
 	}
+}
+
+func Test_GetProcedure(t *testing.T) {
+	db := mysql.DB{}
+	r, err := db.GetProcedure("acompanhamento")
+	if err != nil {
+		t.Errorf("Error >>> %s", err)
+	}
+	t.Logf("Resultado %s", r)
 }

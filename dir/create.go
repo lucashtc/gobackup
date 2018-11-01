@@ -1,5 +1,7 @@
 package dir
 
+// package responsavel por criar pastas onde será armazenado os backups.
+// Cria pasta root e pastas separadas por data de backup e pastas para cada banco
 import (
 	"fmt"
 	"os"

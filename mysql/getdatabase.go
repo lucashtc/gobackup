@@ -1,5 +1,6 @@
 package mysql
 
+// package responsável por obter informações do banco, como nome das bases e tabelas nas bases
 import (
 	"fmt"
 	"strings"
@@ -29,13 +30,15 @@ func (db *DB) GetDatabase() ([]string, error) {
 	stringStmt := strings.Split(string(out), "\r\n")
 
 	for _, v := range stringStmt {
-		newStringStmt = append(newStringStmt, v)
+		if v != "" {
+			newStringStmt = append(newStringStmt, v)
+		}
 	}
 	db.Database = newStringStmt
 	return newStringStmt, nil
 }
 
-// GetTables execute command for getting all name tables and views
+// GetTable execute command for getting all name tables and views
 func (db *DB) GetTable(database string) ([]string, error) {
 	var newStringStmt []string
 	stmtCommand := fmt.Sprintf("USE %s; SHOW TABLES;", database)
@@ -55,9 +58,20 @@ func (db *DB) GetTable(database string) ([]string, error) {
 	return newStringStmt, nil
 }
 
-// // GetProcedure getProcedures by database
-// func (db *DB) GetProcedure(database string) ([]string, error) {
-// 	var newStringStmt []string
-// 	stmtCommand := fmt.Sprintf("USE %s; SHOW PROCEDURES")
-// 	return []string{}, nil
-// }
+// GetProcedure getProcedures by database
+func (db *DB) GetProcedure(database string) ([]string, error) {
+	var newStringStmt []string
+	command := fmt.Sprintf("use mysql; select name from mysql.proc where db = '%s';", database)
+	stmtCommand := []string{"-B", "-s", "-u", "root", "-e", command}
+	out, err := execmysql.Exec(stmtCommand)
+	if err != nil {
+		return []string{}, fmt.Errorf("Falha ao executar comando %s, Errror >> %s", command, err)
+	}
+
+	stringStmt := strings.Split(string(out), "\r\n")
+	for _, v := range stringStmt {
+		newStringStmt = append(newStringStmt, v)
+	}
+	db.Procedure = newStringStmt
+	return newStringStmt, nil
+}
