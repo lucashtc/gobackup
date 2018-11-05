@@ -1,5 +1,10 @@
 package mysql
 
+import (
+	"fmt"
+	
+)
+
 // Database info databse
 type Database struct {
 	Server string  `yaml:"Server"`
@@ -8,17 +13,20 @@ type Database struct {
 
 // Param database e tables
 type Param struct {
-	BD    string   `yaml:"BD"`
-	Table []string `yaml:"Table"`
+	BD        string   `yaml:"BD"`
+	Table     []string `yaml:"Table"`
+	Procedure []string `yaml:"Procedure"`
 }
 
 // DumpAll dump all database
-func (d Database) DumpAll() {
-	// cmd := exec.Command("mysqldump", "d.")
-	// out, err := cmd.CombinedOutput()
-	// if err != nil {
-	// 	log.Fatalf("cmd.Run() failed with %s\n", err)
-	// }
+func (d Database) DumpAll() error {
+
+	go func(){
+		err := CreateDir()
+		if err != nil {
+			return err
+		}error
+	}
 }
 
 // Dump databse and tables

@@ -24,7 +24,7 @@ func (db *DB) GetDatabase() ([]string, error) {
 	command := []string{"-B", "-s", "-u", "root", "-e", "SHOW DATABASES"}
 	out, err := execmysql.Exec(command)
 	if err != nil {
-		return []string{}, fmt.Errorf("Falha ao getting name databases >> %s", err)
+		return []string{}, fmt.Errorf("Falha ao pegar name das bases >> %s", err)
 	}
 
 	stringStmt := strings.Split(string(out), "\r\n")
@@ -58,10 +58,11 @@ func (db *DB) GetTable(database string) ([]string, error) {
 	return newStringStmt, nil
 }
 
-// GetProcedure getProcedures by database
+// GetProcedure getProcedures by database local
 func (db *DB) GetProcedure(database string) ([]string, error) {
 	var newStringStmt []string
 	command := fmt.Sprintf("use mysql; select name from mysql.proc where db = '%s';", database)
+
 	stmtCommand := []string{"-B", "-s", "-u", "root", "-e", command}
 	out, err := execmysql.Exec(stmtCommand)
 	if err != nil {
@@ -72,6 +73,7 @@ func (db *DB) GetProcedure(database string) ([]string, error) {
 	for _, v := range stringStmt {
 		newStringStmt = append(newStringStmt, v)
 	}
+
 	db.Procedure = newStringStmt
 	return newStringStmt, nil
 }
