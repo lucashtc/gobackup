@@ -7,8 +7,7 @@ import (
 )
 
 func Test_GetDataBase(t *testing.T) {
-	db := mysql.DB{}
-	bases, err := db.GetDatabase()
+	bases, err := mysql.GetDatabase()
 	if err != nil {
 		t.Errorf("Falha os obter name database >> %s", err)
 	}
@@ -17,14 +16,13 @@ func Test_GetDataBase(t *testing.T) {
 }
 
 func Test_GetTable(t *testing.T) {
-	db := mysql.DB{}
-	bases, err := db.GetDatabase()
+	bases, err := mysql.GetDatabase()
 	if err != nil {
 		t.Errorf("Falha ao obter nome das bases de dados >> %s", err)
 	}
 
 	for _, v := range bases {
-		out, err := db.GetTable(v)
+		out, err := mysql.GetTable(v)
 		if err != nil {
 			t.Errorf("Falha ao obter tables das bases  >> %s", err)
 		}
@@ -37,14 +35,13 @@ func Test_GetTable(t *testing.T) {
 }
 
 func Test_GetProcedure(t *testing.T) {
-	db := mysql.DB{}
-	bases, err := db.GetDatabase()
+	bases, err := mysql.GetDatabase()
 	if err != nil {
 		t.Errorf("Falha ao obter nome das bases de dados >> %s", err)
 	}
 
 	for _, v := range bases {
-		r, err := db.GetProcedure(v)
+		r, err := mysql.GetProcedure(v)
 		if err != nil {
 			t.Errorf("Error >>> %s", err)
 		}

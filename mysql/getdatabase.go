@@ -8,12 +8,8 @@ import (
 	"github.com/lucashtc/gobackup/execmysql"
 )
 
-// DB store data databases
-type DB struct {
-}
-
 // GetDatabase excute command for getting name all databases
-func (db *DB) GetDatabase() ([]string, error) {
+func GetDatabase() ([]string, error) {
 	var newStringStmt []string
 	command := []string{"-B", "-s", "-u", "root", "-e", "SHOW DATABASES"}
 	out, err := execmysql.Exec(command)
@@ -32,7 +28,7 @@ func (db *DB) GetDatabase() ([]string, error) {
 }
 
 // GetTable execute command for getting all name tables and views
-func (db *DB) GetTable(database string) ([]string, error) {
+func GetTable(database string) ([]string, error) {
 	var newStringStmt []string
 	stmtCommand := fmt.Sprintf("USE %s; SHOW TABLES;", database)
 	command := []string{"-B", "-s", "-u", "root", "-e", stmtCommand}
@@ -51,7 +47,7 @@ func (db *DB) GetTable(database string) ([]string, error) {
 }
 
 // GetProcedure getProcedures by database local
-func (db *DB) GetProcedure(database string) ([]string, error) {
+func GetProcedure(database string) ([]string, error) {
 	var newStringStmt []string
 	command := fmt.Sprintf("use mysql; select name from mysql.proc where db = '%s';", database)
 
