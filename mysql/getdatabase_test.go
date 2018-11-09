@@ -28,16 +28,32 @@ func Test_GetTable(t *testing.T) {
 		if err != nil {
 			t.Errorf("Falha ao obter tables das bases  >> %s", err)
 		}
-		t.Logf("Resultado %s", out)
-
+		t.Log("\n")
+		t.Logf("Base >> %s \n", v)
+		for _, ta := range out {
+			t.Logf("Tabela >>>>> %s \n", ta)
+		}
 	}
 }
 
 func Test_GetProcedure(t *testing.T) {
 	db := mysql.DB{}
-	r, err := db.GetProcedure("acompanhamento")
+	bases, err := db.GetDatabase()
 	if err != nil {
-		t.Errorf("Error >>> %s", err)
+		t.Errorf("Falha ao obter nome das bases de dados >> %s", err)
 	}
-	t.Logf("Resultado %s", r)
+
+	for _, v := range bases {
+		r, err := db.GetProcedure(v)
+		if err != nil {
+			t.Errorf("Error >>> %s", err)
+		}
+
+		t.Logf("\n")
+		t.Logf("Base > %s \n", v)
+		for _, po := range r {
+			t.Logf("Function or Procedure >> %s", po)
+		}
+	}
+
 }

@@ -1,10 +1,5 @@
 package mysql
 
-import (
-	"fmt"
-	
-)
-
 // Database info databse
 type Database struct {
 	Server string  `yaml:"Server"`
@@ -18,18 +13,16 @@ type Param struct {
 	Procedure []string `yaml:"Procedure"`
 }
 
-// DumpAll dump all database
-func (d Database) DumpAll() error {
+// // DumpAll dump all database
+// func (d Database) DumpAll() {
 
-	go func(){
-		err := CreateDir()
-		if err != nil {
-			return err
-		}error
-	}
-}
+// 	err := CreateDir()
+// 	if err != nil {
+// 		fmt.Println(err)
+// 	}
+// }
 
-// Dump databse and tables
-func (d Database) Dump() {
+// // Dump databse and tables
+// func (d Database) Dump() {
 
-}
+// }

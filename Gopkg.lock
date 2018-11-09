@@ -3,11 +3,22 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:be40f095cd741773905744f16c1f7a21fd9226ccd0529f019deb7da6d667f71c"
-  name = "github.com/logrusorgru/aurora"
+  digest = "1:3fdf605f930b135d32ba80db62132e1a702874ee6d5c4bfa4bc27718e37fbbe3"
+  name = "github.com/StudioSol/balancer"
+  packages = [
+    ".",
+    "concurrence",
+  ]
+  pruneopts = "UT"
+  revision = "551d785ab20b124827b183a8df12d9457d95945c"
+
+[[projects]]
+  digest = "1:f6f3f673fde340ce591ce23812767d448f0f77c0b0d5f6f5d9fdfeb699455322"
+  name = "github.com/go-gorp/gorp"
   packages = ["."]
   pruneopts = "UT"
-  revision = "a7b3b318ed4e1ae5b80602b08627267303c68572"
+  revision = "6032c66e0f5f155fd56216ed14cbbdd991034605"
+  version = "v2.1"
 
 [[projects]]
   digest = "1:342378ac4dcb378a5448dd723f0784ae519383532f5e70ade24132c4c8693202"
@@ -21,7 +32,7 @@
   analyzer-name = "dep"
   analyzer-version = 1
   input-imports = [
-    "github.com/logrusorgru/aurora",
+    "github.com/StudioSol/balancer",
     "gopkg.in/yaml.v2",
   ]
   solver-name = "gps-cdcl"

@@ -10,12 +10,6 @@ import (
 
 // DB store data databases
 type DB struct {
-	Database  []string
-	Table     []string
-	Param     []string
-	Trigger   []string
-	View      []string
-	Procedure []string
 }
 
 // GetDatabase excute command for getting name all databases
@@ -34,7 +28,6 @@ func (db *DB) GetDatabase() ([]string, error) {
 			newStringStmt = append(newStringStmt, v)
 		}
 	}
-	db.Database = newStringStmt
 	return newStringStmt, nil
 }
 
@@ -54,7 +47,6 @@ func (db *DB) GetTable(database string) ([]string, error) {
 		}
 	}
 
-	db.Table = newStringStmt
 	return newStringStmt, nil
 }
 
@@ -74,6 +66,5 @@ func (db *DB) GetProcedure(database string) ([]string, error) {
 		newStringStmt = append(newStringStmt, v)
 	}
 
-	db.Procedure = newStringStmt
 	return newStringStmt, nil
 }
