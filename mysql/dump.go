@@ -13,16 +13,12 @@ type Param struct {
 	Procedure []string `yaml:"Procedure"`
 }
 
-// // DumpAll dump all database
-// func (d Database) DumpAll() {
+// DumpAll dump all database
+func (d Database) DumpAll() {
 
-// 	err := CreateDir()
-// 	if err != nil {
-// 		fmt.Println(err)
-// 	}
-// }
+}
 
-// // Dump databse and tables
-// func (d Database) Dump() {
+// Dump databse and tables
+func (d Database) Dump() {
 
-// }
+}
