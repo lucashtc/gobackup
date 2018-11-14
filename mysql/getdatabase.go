@@ -64,3 +64,35 @@ func GetProcedure(database string) ([]string, error) {
 
 	return newStringStmt, nil
 }
+
+// GetData  vai pegar nomes das bases
+func GetData() ([]DataBase, error) {
+
+	base, err := GetDatabase()
+	if err != nil {
+		return []DataBase{}, err
+	}
+
+	db := make([]DataBase,len(base))
+
+	for i, v := range base {
+		db[i].Name = v
+
+		// get name table by database
+		table, err := GetTable(v)
+		if err != nil {
+			return []DataBase{}, err
+		}
+		db[i].Table = table
+
+		// get Procedure/function
+		proc, err := GetProcedure(v)
+		if err != nil {
+			return nil, err
+		}
+		db[i].Procedure = proc
+	}
+
+	return db, nil
+
+}

@@ -54,3 +54,13 @@ func Test_GetProcedure(t *testing.T) {
 	}
 
 }
+
+func Test_GetData(t *testing.T) {
+	//var db []mysql.DataBase
+	r, err := mysql.GetData()
+	if err != nil {
+		t.Errorf("Falha ao obter dados do banco de dados >> %s", err)
+	}
+
+	t.Logf("Resultado>>>> \n\n %s \n\n", r)
+}
