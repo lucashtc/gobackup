@@ -3,6 +3,7 @@ package mysql_test
 import (
 	"testing"
 
+	"github.com/lucashtc/gobackup/helper"
 	"github.com/lucashtc/gobackup/mysql"
 )
 
@@ -62,5 +63,5 @@ func Test_GetData(t *testing.T) {
 		t.Errorf("Falha ao obter dados do banco de dados >> %s", err)
 	}
 
-	t.Logf("Resultado>>>> \n\n %s \n\n", r)
+	helper.PrettyPrint(r)
 }
