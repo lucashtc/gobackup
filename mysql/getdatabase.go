@@ -1,3 +1,5 @@
+// Package mysql resposanvel por pegar nome das bases, tabelas e functions/procedures no servidor mysql
+// Vai pegar todas as bases do servidor local
 package mysql
 
 // package responsável por obter informações do banco, como nome das bases e tabelas nas bases
@@ -73,7 +75,8 @@ func GetData() ([]DataBase, error) {
 		return []DataBase{}, err
 	}
 
-	db := make([]DataBase,len(base))
+	//Alimenta cada posição do slice indexado com name dos schemas, com nome das tabelas e procedures/functions
+	db := make([]DataBase, len(base))
 
 	for i, v := range base {
 		db[i].Name = v
