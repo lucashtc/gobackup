@@ -67,7 +67,7 @@ func GetProcedure(database string) ([]string, error) {
 	return newStringStmt, nil
 }
 
-// GetData  vai pegar nomes das bases
+// GetData vai pegar nomes das bases
 func GetData() ([]DataBase, error) {
 
 	base, err := GetDatabase()

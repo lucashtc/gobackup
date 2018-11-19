@@ -20,23 +20,33 @@ type File struct {
 //CreateDir Diretory for save files sql
 // name nome do banco
 // path é a pasta onde ficará os backups
-func CreateDir(name string, path string) error {
-	// If not exist define default
+func CreateDir(name string, path string) (string, error) {
+	subFolder := []string{"tabela", "function"}
+	// If not exist, define default
 	if path == "" {
 		path = "/backup/"
 	}
-	// Get date and hour
+	// Get date and hour for name folder
 	created := helper.GetCurrentTime()
 
 	// Validate if f.Dir is empty
 	if name == "" {
-		return fmt.Errorf("Param name não pode ser vazio")
+		return "", fmt.Errorf("Parametro name não pode ser vazio")
 	}
 
 	dirStmt := fmt.Sprintf("%s/backup_%s/%s", path, created, name)
 	err := os.MkdirAll(dirStmt, os.ModePerm)
 	if err != nil {
-		return fmt.Errorf("Falha ao criar pasta %s >> %s", dirStmt, err)
+		return "", fmt.Errorf("Falha ao criar pasta %s >> %s", dirStmt, err)
 	}
-	return nil
+
+	for _, v := range subFolder {
+		SubFolderStmt := fmt.Sprintf("%s/%s", dirStmt, v)
+		err := os.MkdirAll(SubFolderStmt, os.ModePerm)
+		if err != nil {
+			return "", fmt.Errorf("Falha ao criar pasta %s >> %s", v, err)
+		}
+	}
+
+	return dirStmt, nil
 }
