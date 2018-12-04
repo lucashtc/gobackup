@@ -21,7 +21,7 @@ type File struct {
 // name nome do banco
 // path é a pasta onde ficará os backups
 func CreateDir(name string, path string) (string, error) {
-	subFolder := []string{"tabela", "function"}
+
 	// If not exist, define default
 	if path == "" {
 		path = "/backup/"
@@ -35,18 +35,21 @@ func CreateDir(name string, path string) (string, error) {
 	}
 
 	dirStmt := fmt.Sprintf("%s/backup_%s/%s", path, created, name)
+	dirStmt = isExist(dirStmt)
+
 	err := os.MkdirAll(dirStmt, os.ModePerm)
 	if err != nil {
 		return "", fmt.Errorf("Falha ao criar pasta %s >> %s", dirStmt, err)
 	}
 
-	for _, v := range subFolder {
-		SubFolderStmt := fmt.Sprintf("%s/%s", dirStmt, v)
-		err := os.MkdirAll(SubFolderStmt, os.ModePerm)
-		if err != nil {
-			return "", fmt.Errorf("Falha ao criar pasta %s >> %s", v, err)
-		}
-	}
-
 	return dirStmt, nil
+}
+
+// isExist verify folder exist and define new name
+func isExist(n string) string {
+	if _, err := os.Stat(n); !os.IsNotExist(err) {
+		n = fmt.Sprintf("%s_1", n)
+		return n
+	}
+	return n
 }

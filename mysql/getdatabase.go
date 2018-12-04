@@ -67,7 +67,8 @@ func GetProcedure(database string) ([]string, error) {
 	return newStringStmt, nil
 }
 
-// GetData vai pegar nomes das bases
+// GetData function vao pegar todas os dados do banco, nome da base, nome das tabelas e procedures
+// retorna um array com essas informações
 func GetData() ([]DataBase, error) {
 
 	base, err := GetDatabase()

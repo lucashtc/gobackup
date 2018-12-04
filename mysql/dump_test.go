@@ -6,18 +6,17 @@ import (
 )
 
 func Test_DirDump(t *testing.T) {
-	bd := make([]DataBase, 2)
-	bd[0] = DataBase{
-		Name: "banco1",
-		//Table:     []string{"table1", "table2"},
-		//Procedure: []string{"rot_faz_nada", "rot_update_sem_where"},
+	bd := []DataBase{
+		DataBase{Name: "banco1"},
+		DataBase{Name: "banco2"},
+		DataBase{Name: "banco3"},
+		DataBase{Name: "banco4"},
+		DataBase{Name: "banco5"},
+		DataBase{Name: "banco6"},
+		DataBase{Name: "banco7"},
+		DataBase{Name: "banco8"},
+		DataBase{Name: "banco9"},
 	}
-	bd[1] = DataBase{
-		Name: "banco2",
-		//Table:     []string{"tabela1", "tabela2"},
-		//Procedure: []string{"rot_pedeu_tudo", "rot_sem_backup"},
-	}
-
 	for _, v := range bd {
 
 		d, err := DirDump(v.Name)
