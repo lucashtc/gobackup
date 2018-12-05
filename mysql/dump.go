@@ -32,14 +32,10 @@ func DumpAll() {
 	fmt.Printf("Criando dumps backups ... \n\n")
 	for _, d := range db {
 
-		fmt.Printf("Fazendo backup da base %s",d.Name)
+		fmt.Printf("Fazendo backup da base %s", d.Name)
 		_, err = DirDump(d.Name)
-		if err = nil {
-			fmt.Printf("Falha ao criar pasta %s \n error: >>>> err \n",d.Name, err)
-		
-
+		if err != nil {
+			fmt.Printf("Falha ao criar pasta %s \n error: >>>> err or%s \n", d.Name, err)
+		}
 	}
-
-
-
 }
