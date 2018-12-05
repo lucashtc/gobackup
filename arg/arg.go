@@ -4,9 +4,9 @@ import (
 	"fmt"
 )
 
-// Arg statment param, define option backup
+// Arg statement param, define option backup
 func Arg(arg []string) {
-	args := statmentArgs(arg)
+	args := statementArgs(arg)
 	v := args[0]
 	switch v {
 	case "HELP":
@@ -23,9 +23,9 @@ func Arg(arg []string) {
 	}
 }
 
-// statmentArgs vai pegar os parametros e tratar
+// statementArgs vai pegar os parametros e tratar
 // retorna param removendo o nome do programa verificando se esta vazio
-func statmentArgs(arg []string) []string {
+func statementArgs(arg []string) []string {
 	args := arg[1:]
 	if len(args) == 0 {
 		fmt.Printf(EMPTY, HELP)

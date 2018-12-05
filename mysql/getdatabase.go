@@ -36,7 +36,7 @@ func GetTable(database string) ([]string, error) {
 	command := []string{"-B", "-s", "-u", "root", "-e", stmtCommand}
 	out, err := execmysql.Exec(command)
 	if err != nil {
-		return []string{}, fmt.Errorf("Falha ao executar comando %s, errror >>> %s", command, err)
+		return []string{}, fmt.Errorf("Falha ao executar command %s, errror >>> %s", command, err)
 	}
 	stringStmt := strings.Split(string(out), "\r\n")
 	for _, v := range stringStmt {
@@ -56,7 +56,7 @@ func GetProcedure(database string) ([]string, error) {
 	stmtCommand := []string{"-B", "-s", "-u", "root", "-e", command}
 	out, err := execmysql.Exec(stmtCommand)
 	if err != nil {
-		return []string{}, fmt.Errorf("Falha ao executar comando %s, Errror >> %s", command, err)
+		return []string{}, fmt.Errorf("Falha ao executar command %s, Errror >> %s", command, err)
 	}
 
 	stringStmt := strings.Split(string(out), "\r\n")

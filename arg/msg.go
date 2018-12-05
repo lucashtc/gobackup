@@ -2,7 +2,7 @@ package arg
 
 var (
 	// HELP for helpe
-	HELP = `Parametros disponiveis
+	HELP = `Parameter disponiveis
 	ALL 	Vai fazer backup de toda a base de dados local
 	SOME	Vai Fazer backup das base de dados configuradas no arquivo config.yml
 	HELP 	Vai mostrar esta mensagem :-)
