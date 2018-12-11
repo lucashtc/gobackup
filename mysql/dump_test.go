@@ -26,3 +26,7 @@ func Test_DirDump(t *testing.T) {
 		fmt.Printf("Diretorio Criado >> %s \n", d)
 	}
 }
+
+func Test_DumpAll(t *testing.T) {
+	DumpAll()
+}

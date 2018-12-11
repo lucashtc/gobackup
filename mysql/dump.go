@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"github.com/lucashtc/gobackup/dir"
+	"github.com/lucashtc/gobackup/execmysql"
 	//"github.com/lucashtc/gobackup/mysql"
 )
 
@@ -23,19 +24,33 @@ func DirDump(dataBase string) (string, error) {
 // DumpAll function vai realizar dump de toda o Schema encontrado no servidor
 func DumpAll() {
 
-	fmt.Printf("Buscando ifnromações dos schemas no servidor...\n")
+	fmt.Printf("Buscando informações dos schemas no servidor...\n")
 	db, err := GetData()
 	if err != nil {
 		fmt.Printf("Falha ao obter dados da bases >>>> \n %s", err)
 	}
 
-	fmt.Printf("Criando dumps backups ... \n\n")
+	fmt.Printf("Criando dumps... \n\n")
 	for _, d := range db {
+		fmt.Printf("=================================================== \n")
 
-		fmt.Printf("Fazendo backup da base %s", d.Name)
-		_, err = DirDump(d.Name)
+		fmt.Printf("Fazendo backup da base %s\n", d.Name)
+		fmt.Printf("Criando pasta da base %s\n", d.Name)
+
+		dirName, err := DirDump(d.Name)
 		if err != nil {
-			fmt.Printf("Falha ao criar pasta %s \n error: >>>> err or%s \n", d.Name, err)
+			fmt.Printf("Falha ao criar pasta %s \n error: >>>> error %s \n", d.Name, err)
 		}
+
+		dirName = fmt.Sprintf("%s/%s.sql", dirName, d.Name)
+
+		fmt.Printf("Realizando dump da base %s \n", d.Name)
+
+		param := []string{"-u", "root", "--no-create-db", d.Name, "-r", dirName}
+		_, err = execmysql.ExecDump(param)
+		if err != nil {
+			fmt.Printf("Falha ao executar dump da base %s \n Error >> %s", d.Name, err)
+		}
+		fmt.Printf("=================================================== \n")
 	}
 }
