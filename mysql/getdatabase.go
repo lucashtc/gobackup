@@ -80,21 +80,27 @@ func GetData() ([]DataBase, error) {
 	db := make([]DataBase, len(base))
 
 	for i, v := range base {
-		db[i].Name = v
+		switch v {
+		case "information_schema":
+		case "performance_schema":
+			break
+		default:
+			db[i].Name = v
 
-		// get name table by database
-		table, err := GetTable(v)
-		if err != nil {
-			return []DataBase{}, err
-		}
-		db[i].Table = table
+			// get name table by database
+			table, err := GetTable(v)
+			if err != nil {
+				return []DataBase{}, err
+			}
+			db[i].Table = table
 
-		// get Procedure/function
-		proc, err := GetProcedure(v)
-		if err != nil {
-			return nil, err
+			// get Procedure/function
+			proc, err := GetProcedure(v)
+			if err != nil {
+				return nil, err
+			}
+			db[i].Procedure = proc
 		}
-		db[i].Procedure = proc
 	}
 
 	return db, nil

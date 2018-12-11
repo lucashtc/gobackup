@@ -6,6 +6,7 @@ import (
 
 	"github.com/lucashtc/gobackup/dir"
 	"github.com/lucashtc/gobackup/execmysql"
+	"github.com/mholt/archiver"
 	//"github.com/lucashtc/gobackup/mysql"
 )
 
@@ -23,7 +24,7 @@ func DirDump(dataBase string) (string, error) {
 
 // DumpAll function vai realizar dump de toda o Schema encontrado no servidor
 func DumpAll() {
-
+	var dbName string
 	fmt.Printf("Buscando informações dos schemas no servidor...\n")
 	db, err := GetData()
 	if err != nil {
@@ -32,6 +33,8 @@ func DumpAll() {
 
 	fmt.Printf("Criando dumps... \n\n")
 	for _, d := range db {
+		dbName = d.Name
+		if dbName == '' {
 		fmt.Printf("=================================================== \n")
 
 		fmt.Printf("Fazendo backup da base %s\n", d.Name)
@@ -51,6 +54,14 @@ func DumpAll() {
 		if err != nil {
 			fmt.Printf("Falha ao executar dump da base %s \n Error >> %s", d.Name, err)
 		}
+
+		fmt.Printf("Compactando arquivo da base \n")
+
+		err = archiver.Archive([]string{dirName}, dirName+"test.zip")
+		if err != nil {
+			fmt.Printf("Ocorreu um error ao compactar o arquivo %s \n", dirName)
+		}
 		fmt.Printf("=================================================== \n")
+	}
 	}
 }
