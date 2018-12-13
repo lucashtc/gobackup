@@ -11,9 +11,17 @@ import (
 )
 
 // GetDatabase excute command for getting name all databases
-func GetDatabase() ([]string, error) {
+func GetDatabase(cf DataBase) ([]string, error) {
 	var newStringStmt []string
-	command := []string{"-B", "-s", "-u", "root", "-e", "SELECT schema_name FROM information_schema.schemata WHERE schema_name NOT IN ('mysql','information_schema','performance_schema') "}
+	var command []string
+	command = append(command, "-B")
+	command = append(command, "-s")
+	command = append(command, "-u", cf.User)
+	if cf.Password != "" {
+		command = append(command, "-p", cf.Password)
+	}
+	command = append(command, "-e", "SELECT schema_name FROM information_schema.schemata WHERE schema_name NOT IN ('mysql','information_schema','performance_schema') ")
+
 	out, err := execmysql.Exec(command)
 	if err != nil {
 		return []string{}, fmt.Errorf("Falha ao pegar name das bases >> %s", err)
@@ -31,9 +39,9 @@ func GetDatabase() ([]string, error) {
 
 // GetData function get name databse
 // retorna um array com essas informações
-func GetData() ([]DataBase, error) {
+func GetData(cf DataBase) ([]DataBase, error) {
 
-	base, err := GetDatabase()
+	base, err := GetDatabase(cf)
 	if err != nil {
 		return []DataBase{}, err
 	}

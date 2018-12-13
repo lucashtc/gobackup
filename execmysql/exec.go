@@ -17,6 +17,7 @@ func Exec(param []string) ([]byte, error) {
 	//fmt.Printf("%+q", strings.Split(string(out), "\n"))
 }
 
+// ExecDump ...
 func ExecDump(param []string) ([]byte, error) {
 
 	cmd := exec.Command("C:/xampp/mysql/bin/mysqldump", param...)

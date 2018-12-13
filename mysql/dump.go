@@ -23,59 +23,59 @@ func DirDump(local, time, dataBase string) (string, error) {
 }
 
 // DumpAll function vai realizar dump de toda o Schema encontrado no servidor
-func DumpAll(local string) {
+func DumpAll(cf DataBase) {
 
 	time := helper.GetCurrentTime()
 
-	Log(local, helper.GetCurrentTime(), fmt.Sprintf("=================================================== \n"))
-	Log(local, helper.GetCurrentTime(), fmt.Sprintf("=================================================== \n"))
+	Log(cf.Dir, helper.GetCurrentTime(), fmt.Sprintf("=================================================== \n"))
+	Log(cf.Dir, helper.GetCurrentTime(), fmt.Sprintf("=================================================== \n"))
 
-	Log(local, helper.GetCurrentTime(), fmt.Sprintf("Buscando informações dos schemas no servidor...\n"))
-	db, err := GetData()
+	Log(cf.Dir, helper.GetCurrentTime(), fmt.Sprintf("Buscando informações dos schemas no servidor...\n"))
+	db, err := GetData(cf)
 	if err != nil {
-		Log(local, helper.GetCurrentTime(), fmt.Sprintf("Falha ao obter dados da bases >>>> \n %s", err))
+		Log(cf.Dir, helper.GetCurrentTime(), fmt.Sprintf("Falha ao obter dados da bases >>>> \n %s", err))
 	}
 
-	Log(local, helper.GetCurrentTime(), fmt.Sprintf("Criando dumps... \n\n"))
+	Log(cf.Dir, helper.GetCurrentTime(), fmt.Sprintf("Criando dumps... \n\n"))
 	for _, d := range db {
 		if d.Name == "" {
 			//Caso o Name seja empty pula para a proxima execução do For
 			continue
 		}
-		Log(local, helper.GetCurrentTime(), fmt.Sprintf("=================================================== \n"))
+		Log(cf.Dir, helper.GetCurrentTime(), fmt.Sprintf("=================================================== \n"))
 
-		Log(local, helper.GetCurrentTime(), fmt.Sprintf("Fazendo backup da base %s\n", d.Name))
-		Log(local, helper.GetCurrentTime(), fmt.Sprintf("Criando pasta da base %s\n", d.Name))
+		Log(cf.Dir, helper.GetCurrentTime(), fmt.Sprintf("Fazendo backup da base %s\n", d.Name))
+		Log(cf.Dir, helper.GetCurrentTime(), fmt.Sprintf("Criando pasta da base %s\n", d.Name))
 
-		dirName, err := DirDump(local, time, d.Name)
+		dirName, err := DirDump(cf.Dir, time, d.Name)
 		if err != nil {
-			Log(local, helper.GetCurrentTime(), fmt.Sprintf("Falha ao criar pasta %s \n error: >>>> error %s \n", d.Name, err))
+			Log(cf.Dir, helper.GetCurrentTime(), fmt.Sprintf("Falha ao criar pasta %s \n error: >>>> error %s \n", d.Name, err))
 		}
 
 		dirNameFile := fmt.Sprintf("%s/%s.sql", dirName, d.Name)
 
-		Log(local, helper.GetCurrentTime(), fmt.Sprintf("Realizando dump da base %s \n", d.Name))
+		Log(cf.Dir, helper.GetCurrentTime(), fmt.Sprintf("Realizando dump da base %s \n", d.Name))
 
 		param := []string{"-u", "root", "--no-create-db", "--skip-add-drop-table", d.Name, "-r", dirNameFile}
 		_, err = execmysql.ExecDump(param)
 		if err != nil {
-			Log(local, helper.GetCurrentTime(), fmt.Sprintf("Falha ao executar dump da base %s \n Error >> %s", d.Name, err))
+			Log(cf.Dir, helper.GetCurrentTime(), fmt.Sprintf("Falha ao executar dump da base %s \n Error >> %s", d.Name, err))
 		}
 
-		Log(local, helper.GetCurrentTime(), fmt.Sprintf("Compactando arquivo da base \n"))
+		Log(cf.Dir, helper.GetCurrentTime(), fmt.Sprintf("Compactando arquivo da base \n"))
 
 		err = archiver.Archive([]string{dirNameFile}, dirNameFile+".zip")
 		if err != nil {
-			Log(local, helper.GetCurrentTime(), fmt.Sprintf("Ocorreu um error ao compactar o arquivo %s \n", dirNameFile))
+			Log(cf.Dir, helper.GetCurrentTime(), fmt.Sprintf("Ocorreu um error ao compactar o arquivo %s \n", dirNameFile))
 		}
 
 		if err := dir.Delete(dirNameFile); err != nil {
-			Log(local, helper.GetCurrentTime(), fmt.Sprintf("Error: %s", err))
+			Log(cf.Dir, helper.GetCurrentTime(), fmt.Sprintf("Error: %s", err))
 		}
-		Log(local, helper.GetCurrentTime(), fmt.Sprintf("=================================================== \n"))
+		Log(cf.Dir, helper.GetCurrentTime(), fmt.Sprintf("=================================================== \n"))
 	}
 
-	Log(local, helper.GetCurrentTime(), fmt.Sprintf(" \n\n\nFim da execução do script de backup\n\n"))
+	Log(cf.Dir, helper.GetCurrentTime(), fmt.Sprintf(" \n\n\nFim da execução do script de backup\n\n"))
 }
 
 // Log ...

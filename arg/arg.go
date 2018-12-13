@@ -11,7 +11,7 @@ import (
 
 // Arg statement param, define option backup
 func Arg() {
-	var local string
+	var conf mysql.DataBase
 
 	app := cli.NewApp()
 
@@ -23,7 +23,17 @@ func Arg() {
 		cli.StringFlag{
 			Name:        "local, l",
 			Usage:       "Define local onde o backup será salvo, por padrão será /'backup/'",
-			Destination: &local,
+			Destination: &conf.Dir,
+		},
+		cli.StringFlag{
+			Name:        "user, u",
+			Usage:       "Usuario",
+			Destination: &conf.User,
+		},
+		cli.StringFlag{
+			Name:        "password, p",
+			Usage:       "Password das bases",
+			Destination: &conf.Password,
 		},
 	}
 
@@ -32,7 +42,7 @@ func Arg() {
 			Name:  "all",
 			Usage: "Será feito backup de toda a base de dados. Essa Opção é padrão :-)",
 			Action: func(c *cli.Context) error {
-				mysql.DumpAll(local)
+				mysql.DumpAll(conf)
 				return nil
 			},
 		},
