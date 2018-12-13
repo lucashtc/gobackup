@@ -8,7 +8,7 @@ import (
 //Exec function return exec command
 func Exec(param []string) ([]byte, error) {
 
-	cmd := exec.Command("C:/xampp/mysql/bin/mysql", param...)
+	cmd := exec.Command("mysql", param...)
 	out, err := cmd.CombinedOutput()
 	if err != nil {
 		return []byte{}, fmt.Errorf("Falha ao executar command >> %s error >> %s", err, out)
