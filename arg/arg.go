@@ -2,6 +2,9 @@ package arg
 
 import (
 	"fmt"
+	"log"
+
+	"github.com/lucashtc/gobackup/mysql"
 )
 
 // Arg statement param, define option backup
@@ -16,7 +19,7 @@ func Arg(arg []string) {
 		fmt.Printf("Vai chamar func para executar a SOME %s", v)
 		break
 	case "ALL":
-		fmt.Printf("Vai executar o que foi definido no arquivo config.yml %s", v)
+		mysql.DumpAll()
 		break
 	default:
 		fmt.Printf(ERROR, v, HELP)
@@ -28,8 +31,7 @@ func Arg(arg []string) {
 func statementArgs(arg []string) []string {
 	args := arg[1:]
 	if len(args) == 0 {
-		fmt.Printf(EMPTY, HELP)
-		return []string{}
+		log.Fatal(HELP)
 	}
 
 	return args

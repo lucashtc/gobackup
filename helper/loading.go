@@ -6,7 +6,7 @@ import (
 )
 
 // Loading vai mostrar mensagem de carregando
-// Stop loading caal function param bool
+// Stop loading call function param boolean
 func Loading(stop chan bool) {
 	for <-stop {
 		fmt.Print("Carregando |\r")

@@ -3,9 +3,12 @@ package mysql
 import (
 	"fmt"
 	"testing"
+
+	"github.com/lucashtc/gobackup/helper"
 )
 
 func Test_DirDump(t *testing.T) {
+	time := helper.GetCurrentTime()
 	bd := []DataBase{
 		{Name: "banco1"},
 		{Name: "banco2"},
@@ -19,7 +22,7 @@ func Test_DirDump(t *testing.T) {
 	}
 	for _, v := range bd {
 
-		d, err := DirDump(v.Name)
+		d, err := DirDump(time, v.Name)
 		if err != nil {
 			t.Logf("Deu ruin >> %s", err)
 		}
@@ -27,6 +30,13 @@ func Test_DirDump(t *testing.T) {
 	}
 }
 
-func Test_DumpAll(t *testing.T) {
-	DumpAll()
+// func Test_DumpAll(t *testing.T) {
+// 	DumpAll()
+// }
+
+func Test_Log(t *testing.T) {
+	time := helper.GetCurrentTime()
+	text := "Criando dumper"
+	local := "C:/backup/"
+	Log(local, time, text)
 }

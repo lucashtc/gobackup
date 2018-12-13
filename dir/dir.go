@@ -5,8 +5,6 @@ package dir
 import (
 	"fmt"
 	"os"
-
-	"github.com/lucashtc/gobackup/helper"
 )
 
 // File Data for created dir and files
@@ -20,21 +18,18 @@ type File struct {
 //CreateDir Diretory for save files sql
 // name nome do banco
 // path é a pasta onde ficará os backups
-func CreateDir(name string, path string) (string, error) {
+func CreateDir(time, name, path string) (string, error) {
 
 	// If not exist, define default
 	if path == "" {
 		path = "/backup/"
 	}
-	// Get date and hour for name folder
-	created := helper.GetCurrentTime()
-
 	// Validate if f.Dir is empty
 	if name == "" {
 		return "", fmt.Errorf("Parametro name não pode ser vazio")
 	}
 
-	dirStmt := fmt.Sprintf("%s/backup_%s/%s", path, created, name)
+	dirStmt := fmt.Sprintf("%s/backup_%s/%s", path, time, name)
 	dirStmt = isExist(dirStmt)
 
 	err := os.MkdirAll(dirStmt, os.ModePerm)
@@ -52,4 +47,43 @@ func isExist(n string) string {
 		return n
 	}
 	return n
+}
+
+// Delete ...
+func Delete(name string) error {
+	if err := os.Remove(name); err != nil {
+		return fmt.Errorf("Falha ao deletar arquivo: %s", err)
+	}
+	return nil
+}
+
+// CreateFile ...
+func CreateFile(name string) error {
+	_, err := os.Stat(name)
+	if os.IsNotExist(err) {
+		file, err := os.Create(name)
+		if err != nil {
+			return err
+		}
+		defer file.Close()
+	}
+	return nil
+}
+
+// WriteFile ...
+func WriteFile(name, s string) error {
+	file, err := os.OpenFile(name, os.O_RDWR, 0644)
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+
+	_, err = file.WriteString(s)
+	if err != nil {
+		return err
+	}
+	if err = file.Sync(); err != nil {
+		return err
+	}
+	return nil
 }

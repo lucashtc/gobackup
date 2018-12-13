@@ -8,7 +8,7 @@ var (
 	HELP 	Vai mostrar esta mensagem :-)
 	`
 	// ERROR Mensagem de error caso um parametro incorreto for informado
-	ERROR = "%s Não é um param valido\n%s"
+	ERROR = "Error: %s Não é um param valido\n%s"
 
 	// EMPTY mensagem pra prametro vazio
 	EMPTY = "Você precisa informar 1 parametro %s"

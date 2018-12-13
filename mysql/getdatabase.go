@@ -13,7 +13,7 @@ import (
 // GetDatabase excute command for getting name all databases
 func GetDatabase() ([]string, error) {
 	var newStringStmt []string
-	command := []string{"-B", "-s", "-u", "root", "-e", "SHOW DATABASES"}
+	command := []string{"-B", "-s", "-u", "root", "-e", "SELECT schema_name FROM information_schema.schemata WHERE schema_name NOT IN ('mysql','information_schema','performance_schema') "}
 	out, err := execmysql.Exec(command)
 	if err != nil {
 		return []string{}, fmt.Errorf("Falha ao pegar name das bases >> %s", err)
@@ -29,45 +29,7 @@ func GetDatabase() ([]string, error) {
 	return newStringStmt, nil
 }
 
-// GetTable execute command for getting all name tables and views
-func GetTable(database string) ([]string, error) {
-	var newStringStmt []string
-	stmtCommand := fmt.Sprintf("USE %s; SHOW TABLES;", database)
-	command := []string{"-B", "-s", "-u", "root", "-e", stmtCommand}
-	out, err := execmysql.Exec(command)
-	if err != nil {
-		return []string{}, fmt.Errorf("Falha ao executar command %s, errror >>> %s", command, err)
-	}
-	stringStmt := strings.Split(string(out), "\r\n")
-	for _, v := range stringStmt {
-		if v != "" {
-			newStringStmt = append(newStringStmt, v)
-		}
-	}
-
-	return newStringStmt, nil
-}
-
-// GetProcedure getProcedures by database local
-func GetProcedure(database string) ([]string, error) {
-	var newStringStmt []string
-	command := fmt.Sprintf("use mysql; select name from mysql.proc where db = '%s';", database)
-
-	stmtCommand := []string{"-B", "-s", "-u", "root", "-e", command}
-	out, err := execmysql.Exec(stmtCommand)
-	if err != nil {
-		return []string{}, fmt.Errorf("Falha ao executar command %s, Errror >> %s", command, err)
-	}
-
-	stringStmt := strings.Split(string(out), "\r\n")
-	for _, v := range stringStmt {
-		newStringStmt = append(newStringStmt, v)
-	}
-
-	return newStringStmt, nil
-}
-
-// GetData function vao pegar todas os dados do banco, nome da base, nome das tabelas e procedures
+// GetData function get name databse
 // retorna um array com essas informações
 func GetData() ([]DataBase, error) {
 
@@ -80,27 +42,7 @@ func GetData() ([]DataBase, error) {
 	db := make([]DataBase, len(base))
 
 	for i, v := range base {
-		switch v {
-		case "information_schema":
-		case "performance_schema":
-			break
-		default:
-			db[i].Name = v
-
-			// get name table by database
-			table, err := GetTable(v)
-			if err != nil {
-				return []DataBase{}, err
-			}
-			db[i].Table = table
-
-			// get Procedure/function
-			proc, err := GetProcedure(v)
-			if err != nil {
-				return nil, err
-			}
-			db[i].Procedure = proc
-		}
+		db[i].Name = v
 	}
 
 	return db, nil
