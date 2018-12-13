@@ -1,38 +1,45 @@
 package arg
 
 import (
-	"fmt"
 	"log"
+	"os"
 
 	"github.com/lucashtc/gobackup/mysql"
+
+	"github.com/urfave/cli"
 )
 
 // Arg statement param, define option backup
-func Arg(arg []string) {
-	args := statementArgs(arg)
-	v := args[0]
-	switch v {
-	case "HELP":
-		fmt.Print(HELP, "\n")
-		break
-	case "SOME":
-		fmt.Printf("Vai chamar func para executar a SOME %s", v)
-		break
-	case "ALL":
-		mysql.DumpAll()
-		break
-	default:
-		fmt.Printf(ERROR, v, HELP)
-	}
-}
+func Arg() {
+	var local string
 
-// statementArgs vai pegar os parametros e tratar
-// retorna param removendo o nome do programa verificando se esta vazio
-func statementArgs(arg []string) []string {
-	args := arg[1:]
-	if len(args) == 0 {
-		log.Fatal(HELP)
+	app := cli.NewApp()
+
+	app.Name = "gobackup"
+	app.Usage = "Script para fazer backup da base de dados local"
+	app.Version = "0.0.1"
+
+	app.Flags = []cli.Flag{
+		cli.StringFlag{
+			Name:        "local, l",
+			Usage:       "Define local onde o backup será salvo, por padrão será /'backup/'",
+			Destination: &local,
+		},
 	}
 
-	return args
+	app.Commands = []cli.Command{
+		{
+			Name:  "all",
+			Usage: "Será feito backup de toda a base de dados. Essa Opção é padrão :-)",
+			Action: func(c *cli.Context) error {
+				mysql.DumpAll(local)
+				return nil
+			},
+		},
+	}
+
+	if err := app.Run(os.Args); err != nil {
+		log.Fatal(err)
+	}
+
 }

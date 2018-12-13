@@ -72,7 +72,7 @@ func CreateFile(name string) error {
 
 // WriteFile ...
 func WriteFile(name, s string) error {
-	file, err := os.OpenFile(name, os.O_RDWR, 0644)
+	file, err := os.OpenFile(name, os.O_APPEND|os.O_WRONLY, 0644)
 	if err != nil {
 		return err
 	}

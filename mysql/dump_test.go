@@ -8,6 +8,7 @@ import (
 )
 
 func Test_DirDump(t *testing.T) {
+	local := "/backup/"
 	time := helper.GetCurrentTime()
 	bd := []DataBase{
 		{Name: "banco1"},
@@ -22,7 +23,7 @@ func Test_DirDump(t *testing.T) {
 	}
 	for _, v := range bd {
 
-		d, err := DirDump(time, v.Name)
+		d, err := DirDump(local, time, v.Name)
 		if err != nil {
 			t.Logf("Deu ruin >> %s", err)
 		}
