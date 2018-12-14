@@ -56,10 +56,11 @@ func DumpAll(cf DataBase) {
 		dirNameFile := fmt.Sprintf("%s/%s.sql", dirName, d.Name)
 
 		Log(cf.Dir, helper.GetCurrentTime(), fmt.Sprintf("Realizando dump da base %s \n", d.Name))
+		var pass string
 		if cf.Password == "" {
-			pass := fmt.Sprintf("-p%s", cf.Password)
+			pass = fmt.Sprintf("-p%s", cf.Password)
 		} else {
-			pass := ""
+			pass = ""
 		}
 
 		param := []string{"-u", cf.User, pass, "--no-create-db", "--skip-add-drop-table", d.Name, "-r", dirNameFile}
