@@ -4,37 +4,45 @@ package mysql
 
 // package responsável por obter informações do banco, como nome das bases e tabelas nas bases
 import (
+	"database/sql"
 	"fmt"
-	"strings"
 
-	"github.com/lucashtc/gobackup/execmysql"
+	// Interface
+	_ "github.com/go-sql-driver/mysql"
 )
+
+// Conn connetion database
+func Conn(conf DataBase) (*sql.DB, error) {
+	pas := fmt.Sprintf(":%s", conf.Password)
+	db, err := sql.Open("mysql", fmt.Sprintf("%s%s@/information_schema", conf.User, pas))
+	if err != nil {
+		return nil, err
+	}
+	return db, nil
+}
 
 // GetDatabase excute command for getting name all databases
 func GetDatabase(cf DataBase) ([]string, error) {
-	var newStringStmt []string
-	var command []string
-	command = append(command, "-B")
-	command = append(command, "-s")
-	command = append(command, "-u", cf.User)
-	if cf.Password != "" {
-		command = append(command, fmt.Sprintf("-p%s", cf.Password))
-	}
-	command = append(command, "-e", "SELECT schema_name FROM information_schema.schemata WHERE schema_name NOT IN ('mysql','information_schema','performance_schema') ")
-
-	out, err := execmysql.Exec(command)
+	var dataBases []string
+	db, err := Conn(cf)
 	if err != nil {
-		return []string{}, fmt.Errorf("Falha ao pegar name das bases >> %s", err)
+		return nil, err
 	}
-
-	stringStmt := strings.Split(string(out), "\r\n")
-
-	for _, v := range stringStmt {
-		if v != "" {
-			newStringStmt = append(newStringStmt, v)
+	defer db.Close()
+	result, err := db.Query("SELECT schema_name FROM information_schema.schemata WHERE schema_name NOT IN ('mysql','information_schema','performance_schema') ")
+	if err != nil {
+		return nil, err
+	}
+	for result.Next() {
+		var schema string
+		err := result.Scan(&schema)
+		if err != nil {
+			return nil, err
 		}
+		dataBases = append(dataBases, schema)
 	}
-	return newStringStmt, nil
+
+	return dataBases, nil
 }
 
 // GetData function get name databse
