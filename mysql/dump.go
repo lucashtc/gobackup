@@ -50,6 +50,7 @@ func DumpAll(cf DataBase) {
 		dirName, err := DirDump(cf.Dir, time, d.Name)
 		if err != nil {
 			Log(cf.Dir, helper.GetCurrentTime(), fmt.Sprintf("Falha ao criar pasta %s \n error: >>>> error %s \n", d.Name, err))
+			continue
 		}
 
 		dirNameFile := fmt.Sprintf("%s/%s.sql", dirName, d.Name)
@@ -60,6 +61,7 @@ func DumpAll(cf DataBase) {
 		_, err = execmysql.ExecDump(param)
 		if err != nil {
 			Log(cf.Dir, helper.GetCurrentTime(), fmt.Sprintf("Falha ao executar dump da base %s \n Error >> %s", d.Name, err))
+			continue
 		}
 
 		Log(cf.Dir, helper.GetCurrentTime(), fmt.Sprintf("Compactando arquivo da base \n"))
@@ -67,10 +69,12 @@ func DumpAll(cf DataBase) {
 		err = archiver.Archive([]string{dirNameFile}, dirNameFile+".zip")
 		if err != nil {
 			Log(cf.Dir, helper.GetCurrentTime(), fmt.Sprintf("Ocorreu um error ao compactar o arquivo %s \n", dirNameFile))
+			continue
 		}
 
 		if err := dir.Delete(dirNameFile); err != nil {
 			Log(cf.Dir, helper.GetCurrentTime(), fmt.Sprintf("Error: %s", err))
+			continue
 		}
 		Log(cf.Dir, helper.GetCurrentTime(), fmt.Sprintf("=================================================== \n"))
 	}
