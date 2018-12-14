@@ -20,7 +20,7 @@ func Exec(param []string) ([]byte, error) {
 // ExecDump ...
 func ExecDump(param []string) ([]byte, error) {
 
-	cmd := exec.Command("C:/xampp/mysql/bin/mysqldump", param...)
+	cmd := exec.Command("mysqldump", param...)
 	out, err := cmd.CombinedOutput()
 	if err != nil {
 		return []byte{}, fmt.Errorf("Falha ao executar command >> %s error >> %s", err, out)
