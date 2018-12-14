@@ -56,8 +56,13 @@ func DumpAll(cf DataBase) {
 		dirNameFile := fmt.Sprintf("%s/%s.sql", dirName, d.Name)
 
 		Log(cf.Dir, helper.GetCurrentTime(), fmt.Sprintf("Realizando dump da base %s \n", d.Name))
+		if cf.Password == "" {
+			pass := fmt.Sprintf("-p%s", cf.Password)
+		} else {
+			pass := ""
+		}
 
-		param := []string{"-u", "root", "--no-create-db", "--skip-add-drop-table", d.Name, "-r", dirNameFile}
+		param := []string{"-u", cf.User, pass, "--no-create-db", "--skip-add-drop-table", d.Name, "-r", dirNameFile}
 		_, err = execmysql.ExecDump(param)
 		if err != nil {
 			Log(cf.Dir, helper.GetCurrentTime(), fmt.Sprintf("Falha ao executar dump da base %s \n Error >> %s", d.Name, err))
