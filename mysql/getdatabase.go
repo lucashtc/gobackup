@@ -18,7 +18,7 @@ func GetDatabase(cf DataBase) ([]string, error) {
 	command = append(command, "-s")
 	command = append(command, "-u", cf.User)
 	if cf.Password != "" {
-		command = append(command, "-p", cf.Password)
+		command = append(command, fmt.Sprintf("-p%s", cf.Password))
 	}
 	command = append(command, "-e", "SELECT schema_name FROM information_schema.schemata WHERE schema_name NOT IN ('mysql','information_schema','performance_schema') ")
 
