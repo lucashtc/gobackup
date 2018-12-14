@@ -57,7 +57,7 @@ func DumpAll(cf DataBase) {
 
 		Log(cf.Dir, helper.GetCurrentTime(), fmt.Sprintf("Realizando dump da base %s \n", d.Name))
 		var pass string
-		if cf.Password == "" {
+		if cf.Password != "" {
 			pass = fmt.Sprintf("-p%s", cf.Password)
 		} else {
 			pass = ""
