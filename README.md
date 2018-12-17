@@ -6,11 +6,11 @@
 ** Ferramenta para criação de backups de Banco MySQL localmente
 
 ## Instalação
-github.com/lucashtc/gobackup
+go get github.com/lucashtc/gobackup
 cd github.com/lucashtc/gobackup
-go run main.go ALL ou go build main.go
+go run gobackup.go -l /backup/ -u userDatabase -p password ALL
+OR 
+go build gobackup -l /backup/ -u userDatabase -p password ALL
 
-
-go get github.com/urfave/cli
-go get github.com/mholt/archiver
-go get gopkg.in/yaml.v2
+## Next Functions
+Dump only one Database
