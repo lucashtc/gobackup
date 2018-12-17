@@ -12,7 +12,7 @@ import (
 )
 
 // Conn connetion database
-func Conn(conf DataBase) (*sql.DB, error) {
+func Conn(conf *DataBase) (*sql.DB, error) {
 	pas := fmt.Sprintf(":%s", conf.Password)
 	db, err := sql.Open("mysql", fmt.Sprintf("%s%s@/information_schema", conf.User, pas))
 	if err != nil {
@@ -22,7 +22,7 @@ func Conn(conf DataBase) (*sql.DB, error) {
 }
 
 // GetDatabase excute command for getting name all databases
-func GetDatabase(cf DataBase) ([]string, error) {
+func GetDatabase(cf *DataBase) ([]string, error) {
 	var dataBases []string
 	db, err := Conn(cf)
 	if err != nil {
@@ -47,7 +47,7 @@ func GetDatabase(cf DataBase) ([]string, error) {
 
 // GetData function get name databse
 // retorna um array com essas informações
-func GetData(cf DataBase) ([]DataBase, error) {
+func GetData(cf *DataBase) ([]DataBase, error) {
 
 	base, err := GetDatabase(cf)
 	if err != nil {

@@ -42,7 +42,7 @@ func Arg() {
 			Name:  "all",
 			Usage: "Será feito backup de toda a base de dados. Essa Opção é padrão :-)",
 			Action: func(c *cli.Context) error {
-				mysql.DumpAll(conf)
+				mysql.DumpAll(&conf)
 				return nil
 			},
 		},

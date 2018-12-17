@@ -9,4 +9,5 @@ type DataBase struct {
 	Table     []string
 	Procedure []string
 	Dir       string
+	DirFile   string
 }

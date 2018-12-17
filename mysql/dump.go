@@ -1,4 +1,4 @@
-// Package mysql  vai egar todas as infrmações das base de dados e fazer dump
+// Package mysql ...
 package mysql
 
 import (
@@ -23,12 +23,12 @@ func DirDump(local, time, dataBase string) (string, error) {
 }
 
 // DumpAll function vai realizar dump de toda o Schema encontrado no servidor
-func DumpAll(cf DataBase) {
+func DumpAll(cf *DataBase) {
 
 	time := helper.GetCurrentTime()
 
-	Log("", "", LIMIT)
-	Log("", "", LIMIT)
+	Log(cf.Dir, "", LIMIT)
+	Log(cf.Dir, "", LIMIT)
 
 	Log(cf.Dir, helper.GetCurrentTime(), SEARCHSCHEMA)
 	db, err := GetData(cf)
@@ -42,6 +42,7 @@ func DumpAll(cf DataBase) {
 			//Caso o Name seja empty pula para a proxima execução do For
 			continue
 		}
+		cf.Name = d.Name
 		Log(cf.Dir, helper.GetCurrentTime(), LIMIT)
 
 		Log(cf.Dir, helper.GetCurrentTime(), fmt.Sprintf("Fazendo backup da base %s\n", d.Name))
@@ -53,32 +54,25 @@ func DumpAll(cf DataBase) {
 			continue
 		}
 
-		dirNameFile := fmt.Sprintf("%s/%s.sql", dirName, d.Name)
+		cf.DirFile = fmt.Sprintf("%s/%s.sql", dirName, d.Name)
 
 		Log(cf.Dir, helper.GetCurrentTime(), fmt.Sprintf("Realizando dump da base %s \n", d.Name))
 
-		if cf.Password != "" {
-			pass = fmt.Sprintf("-p%s", cf.Password)
-		} else {
-			pass = ""
-		}
-
-		param := []string{"-u", cf.User, pass, "--no-create-db", "--skip-add-drop-table", d.Name, "-r", dirNameFile}
-		_, err = execmysql.ExecDump(param)
-		if err != nil {
-			Log(cf.Dir, helper.GetCurrentTime(), fmt.Sprintf("Falha ao executar dump da base %s \n Error >> %s", d.Name, err))
+		// Dump for database
+		if err := dumpdb(cf); err != nil {
+			Log(cf.Dir, helper.GetCurrentTime(), fmt.Sprint(err))
 			continue
 		}
 
 		Log(cf.Dir, helper.GetCurrentTime(), fmt.Sprintf("Compactando arquivo da base \n"))
 
-		err = archiver.Archive([]string{dirNameFile}, dirNameFile+".zip")
+		err = archiver.Archive([]string{cf.DirFile}, cf.DirFile+".zip")
 		if err != nil {
-			Log(cf.Dir, helper.GetCurrentTime(), fmt.Sprintf(ZIPFAIL, dirNameFile))
+			Log(cf.Dir, helper.GetCurrentTime(), fmt.Sprintf(ZIPFAIL, cf.DirFile))
 			continue
 		}
 
-		if err := dir.Delete(dirNameFile); err != nil {
+		if err := dir.Delete(cf.DirFile); err != nil {
 			Log(cf.Dir, helper.GetCurrentTime(), fmt.Sprintf("Error: %s", err))
 			continue
 		}
@@ -86,6 +80,25 @@ func DumpAll(cf DataBase) {
 	}
 
 	Log(cf.Dir, helper.GetCurrentTime(), fmt.Sprintf(" Fim da execução do script de backup\n\n"))
+}
+
+// dumpdb Dump database
+func dumpdb(conf *DataBase) error {
+	var param []string
+	param = append(param, "-u", conf.User)
+	if conf.Password != "" {
+		pass := fmt.Sprintf("-p%s", conf.Password)
+		param = append(param, pass)
+	}
+	param = append(param, "--skip-add-drop-table")
+	param = append(param, conf.Name)
+	param = append(param, "-r", conf.DirFile)
+
+	_, err := execmysql.ExecDump(param)
+	if err != nil {
+		return fmt.Errorf("Falha ao executar dump da base %s \n Error >> %s", conf.Name, err)
+	}
+	return nil
 }
 
 // Log ...
@@ -113,5 +126,6 @@ var (
 	// ZIPFAIL ...
 	ZIPFAIL = "Ocorreu um error ao compactar o arquivo %s \n"
 
-	SEARCHSCHEMA = "Buscando informações dos schemas no servidor...\n"
+	// SEARCHSCHEMA ...
+	SEARCHSCHEMA = "Buscando informações dos schemas no servidor ...\n"
 )
