@@ -7,8 +7,6 @@ Ferramenta para criação de backups de Banco MySQL localmente.
 
 ## Installation
 
-Use the package manager [pip](https://pip.pypa.io/en/stable/) to install foobar.
-
 ```bash
 go get github.com/lucashtc/gobackup 
 ```
