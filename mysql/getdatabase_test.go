@@ -11,7 +11,7 @@ func Test_GetDataBase(t *testing.T) {
 	cf := mysql.DataBase{}
 	cf.Dir = "/backup/"
 	cf.User = "root"
-	bases, err := mysql.GetDatabase(cf)
+	bases, err := mysql.GetDatabase(&cf)
 	if err != nil {
 		t.Errorf("Falha os obter name database >> %s", err)
 	}
@@ -24,7 +24,7 @@ func Test_GetData(t *testing.T) {
 	cf.Dir = "/backup/"
 	cf.User = "root"
 	//var db []mysql.DataBase
-	r, err := mysql.GetData(cf)
+	r, err := mysql.GetData(&cf)
 	if err != nil {
 		t.Errorf("Falha ao obter dados do banco de dados >> %s", err)
 	}
@@ -36,7 +36,7 @@ func Test_Conn(t *testing.T) {
 	conf := mysql.DataBase{}
 	conf.User = "root"
 
-	db, err := mysql.Conn(conf)
+	db, err := mysql.Conn(&conf)
 	if err != nil {
 		t.Fatalf("Falha ao obter nome dos Schemas. Error: %s", err)
 	}
