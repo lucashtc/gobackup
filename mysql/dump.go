@@ -4,11 +4,11 @@ package mysql
 import (
 	"fmt"
 	"os"
+	"sync"
 
 	"github.com/lucashtc/gobackup/dir"
 	"github.com/lucashtc/gobackup/execmysql"
 	"github.com/lucashtc/gobackup/helper"
-	"github.com/mholt/archiver"
 	//"github.com/lucashtc/gobackup/mysql"
 )
 
@@ -38,6 +38,7 @@ func DumpAll(cf *DataBase) {
 
 	Log(cf.Dir, helper.GetCurrentTime(), fmt.Sprintf("Criando dumps... \n\n"))
 	for _, d := range db {
+		var w sync.WaitGroup
 		if d.Name == "" {
 			//Caso o Name seja empty pula para a proxima execução do For
 			continue
@@ -66,11 +67,14 @@ func DumpAll(cf *DataBase) {
 
 		Log(cf.Dir, helper.GetCurrentTime(), fmt.Sprintf("Compactando arquivo da base \n"))
 
-		err = archiver.Archive([]string{cf.DirFile}, cf.DirFile+".zip")
-		if err != nil {
-			Log(cf.Dir, helper.GetCurrentTime(), fmt.Sprintf(ZIPFAIL, cf.DirFile))
-			continue
-		}
+		w.Add(1)
+		go func() {
+			if err := helper.Zip(cf.DirFile); err != nil {
+				Log(cf.Dir, helper.GetCurrentTime(), fmt.Sprintf(ZIPFAIL, cf.DirFile))
+			}
+			w.Done()
+		}()
+		w.Wait()
 
 		if err := dir.Delete(cf.DirFile); err != nil {
 			Log(cf.Dir, helper.GetCurrentTime(), fmt.Sprintf("Error: %s", err))
