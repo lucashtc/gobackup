@@ -18,7 +18,8 @@ cd github.com/lucashtc/gobackup
 
 go run gobackup.go -l /backup/ -u userDatabase -p password ALL 
 #OR 
-go build gobackup -l /backup/ -u userDatabase -p password ALL 
+go build 
+gobackup -l /backup/ -u userDatabase -p password ALL 
 ```
 
 ## License
