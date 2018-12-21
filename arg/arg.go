@@ -40,7 +40,7 @@ func Arg() {
 	app.Commands = []cli.Command{
 		{
 			Name:  "all",
-			Usage: "Será feito backup de toda a base de dados. Essa Opção é padrão :-)",
+			Usage: "Será feito backup de toda a base de dados. Essa Opção é obrigatoria :-)",
 			Action: func(c *cli.Context) error {
 				mysql.DumpAll(&conf)
 				return nil
