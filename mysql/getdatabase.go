@@ -3,14 +3,13 @@
 package mysql
 
 // package responsável por obter informações do banco, como nome das bases e tabelas nas bases
-import (
-	// Interface
-	_ "github.com/go-sql-driver/mysql"
-)
+
+// Interface
+//_ "github.com/go-sql-driver/mysql"
 
 // GetData function get name databse
 // retorna um array com essas informações
-func GetData(cf *DataBase) ([]DataBase, error) {
+/*func GetData(cf *DataBase) ([]DataBase, error) {
 
 	base, err := GetDatabase(cf)
 	if err != nil {
@@ -27,3 +26,4 @@ func GetData(cf *DataBase) ([]DataBase, error) {
 	return db, nil
 
 }
+*/

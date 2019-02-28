@@ -1,20 +1,13 @@
 // Package mysql ...
 package mysql
 
-import (
-	"fmt"
-	"os"
-	"sync"
+//	"github.com/lucashtc/gobackup/execmysql"
 
-	"github.com/lucashtc/gobackup/dir"
-	"github.com/lucashtc/gobackup/execmysql"
-	"github.com/lucashtc/gobackup/helper"
-	//"github.com/lucashtc/gobackup/mysql"
-)
+//"github.com/lucashtc/gobackup/mysql"
 
 // DirDump function create directory for save files backup
 // Separando por pastas cadas tipo de objeto do schema
-func DirDump(local, time, dataBase string) (string, error) {
+/*func DirDump(local, time, dataBase string) (string, error) {
 	d, err := dir.CreateDir(time, dataBase, local)
 	if err != nil {
 		return "", err
@@ -133,3 +126,4 @@ var (
 	// SEARCHSCHEMA ...
 	SEARCHSCHEMA = "Buscando informações dos schemas no servidor ...\n"
 )
+*/

@@ -1,12 +1,6 @@
 package mysql_test
 
-import (
-	"testing"
-
-	"github.com/lucashtc/gobackup/helper"
-	"github.com/lucashtc/gobackup/mysql"
-)
-
+/*
 func Test_GetDataBase(t *testing.T) {
 	cf := mysql.DataBase{}
 	cf.Dir = "/backup/"
@@ -18,6 +12,7 @@ func Test_GetDataBase(t *testing.T) {
 	//Funciona com go test -v mysql
 	t.Logf("Result %v \n", bases)
 }
+
 
 func Test_GetData(t *testing.T) {
 	cf := mysql.DataBase{}
@@ -47,3 +42,4 @@ func Test_Conn(t *testing.T) {
 	}
 
 }
+*/

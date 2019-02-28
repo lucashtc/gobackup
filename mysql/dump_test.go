@@ -1,12 +1,6 @@
 package mysql
 
-import (
-	"fmt"
-	"testing"
-
-	"github.com/lucashtc/gobackup/helper"
-)
-
+/*
 func Test_DirDump(t *testing.T) {
 	local := "/backup/"
 	time := helper.GetCurrentTime()
@@ -41,3 +35,4 @@ func Test_Log(t *testing.T) {
 	local := "C:/backup/"
 	Log(local, time, text)
 }
+*/

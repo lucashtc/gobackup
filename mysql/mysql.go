@@ -3,14 +3,18 @@ package mysql
 
 import (
 	"database/sql"
-	"fmt"
 
-	_ "github.com/go-sql-driver/mysql"
+	"github.com/go-sql-driver/mysql"
 )
 
-type mysql struct {
-	database []string
-	param    []string
+type my struct {
+	Databases []string
+	DBName    string
+	Param     []string
+	Password  string
+	User      string
+	Dir       string
+	File      string
 }
 
 // Define name executable
@@ -19,21 +23,33 @@ const (
 	executablemysql string = "mysql"
 )
 
-func (m *mysql) GetDatabase() {
-
-}
-
 // Conn connetion database
-func (m *mysql) Conn(*sql.DB, error) {
-	pas := fmt.Sprintf(":%s", conf.Password)
-	db, err := sql.Open("mysql", fmt.Sprintf("%s%s@/information_schema", conf.User, pas))
+func (m *my) Conn() (*sql.DB, error) {
+	var conf = mysql.Config{
+		User:   m.User,
+		Passwd: m.Password,
+		DBName: m.DBName,
+		Net:    "tcp",
+		Addr:   "localhost:3306",
+		Params: map[string]string{"charset": "utf8"},
+	}
+
+	configParse := conf.FormatDSN()
+
+	db, err := sql.Open("mysql", configParse)
 	if err != nil {
 		return nil, err
 	}
+
 	return db, nil
 }
 
-// GetDatabase excute command for getting name all databases
+/*
+func (m *mysql) GetDatabase() ([]string, error) {
+
+}
+
+// GetDatabase execute command for getting name all databases
 func GetDatabase(m *mysql) ([]string, error) {
 	var dataBases []string
 	db, err := Conn(m)
@@ -56,3 +72,4 @@ func GetDatabase(m *mysql) ([]string, error) {
 
 	return dataBases, nil
 }
+*/
