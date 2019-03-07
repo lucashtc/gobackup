@@ -3,6 +3,7 @@ package mysql
 
 import (
 	"database/sql"
+	"fmt"
 
 	"github.com/go-sql-driver/mysql"
 )
@@ -25,14 +26,14 @@ const (
 
 // Conn connetion database
 func (m *my) Conn() (*sql.DB, error) {
-	var conf = mysql.Config{
-		User:   m.User,
-		Passwd: m.Password,
-		DBName: m.DBName,
-		Net:    "tcp",
-		Addr:   "localhost:3306",
-		Params: map[string]string{"charset": "utf8"},
-	}
+	conf := mysql.NewConfig()
+
+	conf.User = m.User
+	conf.Passwd = m.Password
+	conf.DBName = m.DBName
+	conf.Net = "tcp"
+	conf.Addr = "localhost:3306"
+	conf.Params = map[string]string{"charset": "utf8"}
 
 	configParse := conf.FormatDSN()
 
@@ -44,32 +45,37 @@ func (m *my) Conn() (*sql.DB, error) {
 	return db, nil
 }
 
-/*
-func (m *mysql) GetDatabase() ([]string, error) {
-
-}
-
-// GetDatabase execute command for getting name all databases
-func GetDatabase(m *mysql) ([]string, error) {
-	var dataBases []string
-	db, err := Conn(m)
+// GetDatabase get name schemas
+func (m *my) GetDatabase() ([]string, error) {
+	DB, err := m.Conn()
+	var dataBase []string
 	if err != nil {
 		return nil, err
 	}
-	defer db.Close()
-	result, err := db.Query("SELECT schema_name FROM information_schema.schemata WHERE schema_name NOT IN ('mysql','information_schema','performance_schema') ")
+	defer DB.Close()
+
+	stmt, err := DB.Query("SELECT schema_name FROM information_schema.schemata WHERE schema_name NOT IN ('information_schema','performance_schema')")
 	if err != nil {
 		return nil, err
 	}
-	for result.Next() {
+	for stmt.Next() {
 		var schema string
-		err := result.Scan(&schema)
-		if err != nil {
+		err := stmt.Scan(&schema)
+		if err != err {
 			return nil, err
 		}
-		dataBases = append(dataBases, schema)
+		dataBase = append(dataBase, schema)
 	}
 
-	return dataBases, nil
+	if len(dataBase) == 0 {
+		return nil, fmt.Errorf("Seu banco de dados nao possui Schemas. Total bases encontradas: %d", len(dataBase))
+	}
+
+	m.Databases = dataBase
+
+	return dataBase, nil
 }
-*/
+
+func (m *my) dump() {
+
+}
