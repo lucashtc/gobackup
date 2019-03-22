@@ -5,27 +5,41 @@ import (
 	"database/sql"
 	"fmt"
 
+	"github.com/lucashtc/gobackup/helper"
+
 	"github.com/go-sql-driver/mysql"
 )
 
-type my struct {
-	Databases []string
-	DBName    string
-	Param     []string
-	Password  string
-	User      string
-	Dir       string
-	File      string
+// My ...
+type My struct {
+	Databases       []string // Stored name databases
+	DBName          string
+	Param           []string // Parameters for dumps
+	Password        string
+	User            string
+	Port            int
+	Dir             string // Path for directory dumps current by database
+	DirPath         string // Directory for stored dumps
+	File            string // Name of the current dump
+	DirRelative     string
+	Executabledump  string
+	Executablemysql string
+	CurrentTime     string
 }
 
-// Define name executable
-const (
-	executabledump  string = "mysqldump"
-	executablemysql string = "mysql"
-)
+// New return struct instance
+func New() *My {
+	return &My{
+		Executabledump:  "mysqldump",
+		Executablemysql: "mysql",
+		DirPath:         "/backup/",
+		CurrentTime:     helper.GetCurrentTime(),
+		Port:            3306,
+	}
+}
 
 // Conn connetion database
-func (m *my) Conn() (*sql.DB, error) {
+func (m *My) Conn() (*sql.DB, error) {
 	conf := mysql.NewConfig()
 
 	conf.User = m.User
@@ -46,7 +60,7 @@ func (m *my) Conn() (*sql.DB, error) {
 }
 
 // GetDatabase get name schemas
-func (m *my) GetDatabase() ([]string, error) {
+func (m *My) GetDatabase() ([]string, error) {
 	DB, err := m.Conn()
 	var dataBase []string
 	if err != nil {
@@ -76,6 +90,59 @@ func (m *my) GetDatabase() ([]string, error) {
 	return dataBase, nil
 }
 
-func (m *my) dump() {
-	
+// CreateParam ...
+func (m *My) CreateParam() {
+	var param []string
+	m.Param = []string{}
+	param = append(param, "-u", m.User)
+	if m.Password != "" {
+		param = append(param, "-p", m.Password)
+	}
+	param = append(param, "-r", m.DirRelative)
+	param = append(param, m.Param...)
+	param = append(param, m.DBName)
+	m.Param = param
+
+}
+
+// Exec ...
+func (m *My) Exec() error {
+	m.CreateParam()
+	_, err := helper.Exec(m.Executabledump, m.Param)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+// Dump ...
+func (m *My) Dump() error {
+	_, err := m.GetDatabase()
+	if err != nil {
+		return err
+	}
+
+	m.Dir, err = helper.CreateDir(m.CurrentTime, m.DirPath)
+	for _, b := range m.Databases {
+		m.DBName = b
+
+		m.File = fmt.Sprintf("%s.sql", b)
+		m.DirRelative = fmt.Sprintf("%s/%s", m.Dir, m.File)
+
+		err = helper.CreateFile(m.DirRelative)
+		if err != nil {
+			return err
+		}
+
+		if err != nil {
+			return err
+		}
+
+		err = m.Exec()
+		if err != nil {
+			return err
+		}
+
+	}
+	return nil
 }

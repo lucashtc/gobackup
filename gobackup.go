@@ -11,5 +11,6 @@ import (
 func main() {
 	maxProcs := runtime.NumCPU()
 	runtime.GOMAXPROCS(maxProcs)
+
 	arg.Arg()
 }

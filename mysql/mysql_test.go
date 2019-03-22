@@ -7,7 +7,7 @@ import (
 )
 
 func TestConn(t *testing.T) {
-	conf := my{
+	conf := My{
 		User:     "root",
 		Password: "",
 	}
@@ -20,7 +20,7 @@ func TestConn(t *testing.T) {
 }
 
 func TestGetDatabase(t *testing.T) {
-	conf := my{
+	conf := My{
 		User:     "root",
 		Password: "",
 	}
@@ -37,5 +37,16 @@ func TestGetDatabase(t *testing.T) {
 	}
 
 	assert.Contains(t, database, "mysql")
+
+}
+
+func TestDump(t *testing.T) {
+	m := New()
+	m.User = "root"
+
+	err := m.Dump()
+	if err != nil {
+		t.Error(err)
+	}
 
 }

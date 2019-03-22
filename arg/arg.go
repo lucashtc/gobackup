@@ -11,7 +11,7 @@ import (
 
 // Arg statement param, define option backup
 func Arg() {
-	var conf mysql.DataBase
+	conf := mysql.New()
 
 	app := cli.NewApp()
 
@@ -42,7 +42,7 @@ func Arg() {
 			Name:  "all",
 			Usage: "Será feito backup de toda a base de dados. Essa Opção é obrigatoria :-)",
 			Action: func(c *cli.Context) error {
-				mysql.DumpAll(&conf)
+				//mysql.DumpAll(&conf)
 				return nil
 			},
 		},
