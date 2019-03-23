@@ -9,7 +9,6 @@ import (
 func Exec(program string, param []string) ([]byte, error) {
 
 	cmd := exec.Command(program, param...)
-	fmt.Println(param)
 	out, err := cmd.CombinedOutput()
 	if err != nil {
 		return nil, fmt.Errorf("Fail e command >> %s error >> %s", err, out)

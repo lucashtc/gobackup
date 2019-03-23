@@ -142,7 +142,6 @@ func (m *My) Dump() error {
 		if err != nil {
 			return err
 		}
-
 	}
 	return nil
 }

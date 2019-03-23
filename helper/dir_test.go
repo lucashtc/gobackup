@@ -7,12 +7,11 @@ import (
 
 // Melhorar codigo para verificar se os arquivos foram criados como esperado
 func Test_CreatDir(t *testing.T) {
-	bd := []string{"user", "produtos", "umGrandeVazio"}
-	path := "/backup"
+	path := []string{"backup", "teste"}
 	time := GetCurrentTime()
 
-	for _, v := range bd {
-		d, err := CreateDir(time, v, path)
+	for _, p := range path {
+		d, err := CreateDir(time, p)
 		if err != nil {
 			t.Errorf("<<< Falha ao criar pasta da base >>>%v ", err)
 		}

@@ -1,6 +1,7 @@
 package arg
 
 import (
+	"fmt"
 	"log"
 	"os"
 
@@ -17,35 +18,43 @@ func Arg() {
 
 	app.Name = "gobackup"
 	app.Usage = "Script para fazer backup da base de dados local"
-	app.Version = "0.0.1"
+	app.Version = "0.1"
 
 	app.Flags = []cli.Flag{
 		cli.StringFlag{
 			Name:        "local, l",
-			Usage:       "Define local onde o backup será salvo, por padrão será /'backup/'",
+			Usage:       "Set location stored backups,default /'backup/'",
 			Destination: &conf.Dir,
 		},
 		cli.StringFlag{
 			Name:        "user, u",
-			Usage:       "Usuario",
+			Usage:       "User",
 			Destination: &conf.User,
 		},
 		cli.StringFlag{
 			Name:        "password, p",
-			Usage:       "Password das bases",
+			Usage:       "Password",
 			Destination: &conf.Password,
+		},
+		cli.StringSliceFlag{
+			Name:  "param, pa",
+			Usage: "Parameters optional",
+			//Destination: &conf.Param,
 		},
 	}
 
-	app.Commands = []cli.Command{
-		{
-			Name:  "all",
-			Usage: "Será feito backup de toda a base de dados. Essa Opção é obrigatoria :-)",
-			Action: func(c *cli.Context) error {
-				//mysql.DumpAll(&conf)
-				return nil
-			},
-		},
+	app.Action = func(c *cli.Context) error {
+		if c.String("user") == "" {
+			return fmt.Errorf("Flag user/-u can not be empty.%s", c.String("user"))
+		}
+		if c.StringSlice("param") != nil {
+			conf.Param = c.StringSlice("param")
+		}
+		err := conf.Dump()
+		if err != nil {
+			return err
+		}
+		return nil
 	}
 
 	if err := app.Run(os.Args); err != nil {

@@ -42,6 +42,8 @@ func TestGetDatabase(t *testing.T) {
 
 func TestDump(t *testing.T) {
 	m := New()
+
+	m.DirPath = "/bac"
 	m.User = "root"
 
 	err := m.Dump()
